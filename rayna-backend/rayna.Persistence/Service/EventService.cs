@@ -44,10 +44,10 @@ public class EventService : IEventService
 
         var mapComplain = _mapper.Map<Event>(addEventDto);
         var filePath = await _eventRepo.GetFilePath("Rayna");
-        var eventNo = await _eventRepo.GetComplainNo();        
+        
         var mailConfiguration = await _eventRepo.GetMailConfiguration();
         var mailFormate = await _eventRepo.GetMailFormate("Email", "RegistrationUser");
-        mapComplain.EventNo = eventNo;
+        
         var additionalPath = "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MMM") + "\\";
 
         var directoryPath = filePath.Path + additionalPath;
@@ -81,7 +81,7 @@ public class EventService : IEventService
                 eventFiles.Add(eventFile);
                 mailAttachments.Add(mailAttachment);
             }
-            mapComplain.EventFileList = eventFiles;
+            
         }        
 
         MailMaster addUserMail = new MailMaster()
@@ -93,8 +93,6 @@ public class EventService : IEventService
             Attachments = mailAttachments
         };
         mailMasters.Add(addUserMail);
-
-        mapComplain.MailMasters = mailMasters;
 
         return await _eventRepo.AddEvent(mapComplain);
     }

@@ -4,27 +4,30 @@ namespace rayna.Common.Entities;
 
 public class Event : Audit
 {
-    public int Id { get; set; }
-    public int? UserId { get; set; }
-    public int? EventTypeId { get; set; }
-    public string EventNo { get; set; }
+    public int Id { get; set; }        
     public string? Name { get; set; }
-    public DateTimeOffset EventDate { get; set; }
-    public string? Address { get; set; }
-    public string? PhoneNo { get; set; }
-    public string? MobileNo { get; set; }
-    public string? EmailId { get; set; }
-    public string? OtherDetails { get; set; }
-    public DateTimeOffset? CompletionDate { get; set; }
-    public bool IsCompleted { get; set; }
+    public string? SubTitle { get; set; }
+    public int SupplierId { get; set; }
+    public int CountryId { get; set; }
+    public int StateId { get; set; }
+    public int CityId { get; set; }
+    public int InventoryId { get; set; }
+    public int TypeId { get; set; }
+    public int CategoryId { get; set; }
+    public int CurrencyId { get; set; }
+    public DateTime FromDateTime { get; set; }
+    public DateTime ToDateTime { get; set; }
+    public string? Description { get; set; }
+    public int Status { get; set; }
+    
     
     #region Tables Relationship
-    [ForeignKey(nameof(UserId))]
-    public Registration? Registration { get; set; }  
-    [InverseProperty(nameof(EventFiles.Rayna))]
-    public IList<EventFiles>? EventFileList { get; set; }
-    [InverseProperty(nameof(MailMaster.Rayna))]
-    public IList<MailMaster>? MailMasters { get; set; }
+    //[ForeignKey(nameof(UserId))]
+    //public Registration? Registration { get; set; }  
+    //[InverseProperty(nameof(EventFiles.Rayna))]
+    //public IList<EventFiles>? EventFileList { get; set; }
+    //[InverseProperty(nameof(MailMaster.Rayna))]
+    //public IList<MailMaster>? MailMasters { get; set; }
 
     #endregion
 }

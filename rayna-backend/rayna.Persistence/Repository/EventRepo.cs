@@ -8,16 +8,19 @@ using rayna.Core.Contract.Repository;
 using rayna.Persistence.Configuration;
 using rayna.Persistence.Helper;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace rayna.Persistence.Repository
 {
     public class EventRepo : IEventRepo
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public EventRepo(ApplicationDbContext context)
+        public EventRepo(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<PaginationResponse<EventResponse>> GetEvent(bool? isCompleted, string? searchingParams, SortingParams sortingParams)
@@ -25,21 +28,19 @@ namespace rayna.Persistence.Repository
             try
             {
                 var events = new List<EventResponse>().AsQueryable();
+                IQueryable<Event>? source;
 
                 if (searchingParams is not null)
                 {
-                    events = _context.Event
-                            .Where(x => x.IsActive && (x.IsCompleted == isCompleted) && (x.EventNo.Contains(searchingParams) || x.Name.Contains(searchingParams)))
-                            .Select(EventResponse.ToDTO())
-                            .AsQueryable();
+                    source = _context.Event
+                            .Where(x => x.Name.Contains(searchingParams));
                 }
                 else
                 {
-                    events = _context.Event
-                            .Where(x => x.IsActive && x.IsCompleted == isCompleted)                            
-                            .Select(EventResponse.ToDTO())
-                            .AsQueryable();
+                    source = _context.Event;
                 }
+
+                events = _mapper.ProjectTo<EventResponse>(source).AsQueryable();
 
                 var totalCount = await events.CountAsync();
                 double? pageCount = Math.Ceiling(totalCount / sortingParams.PageSize);
@@ -68,33 +69,6 @@ namespace rayna.Persistence.Repository
             }
         }
 
-        public async Task<string> GetComplainNo()
-        {
-            try
-            {
-                var lastEvent = await _context.Event.ToListAsync();
-                string? newEventNo = null;
-
-                if (lastEvent.Count == 0)
-                {
-                    newEventNo = "0001" + "-" + DateTime.Now.Year;
-                }
-                else
-                {
-                    var lastEventNo = lastEvent.LastOrDefault();
-                    var splitNumber = lastEventNo.EventNo.Split("-");
-                    newEventNo = (Convert.ToInt32(splitNumber[0]) + 1).ToString("D4") + "-" + splitNumber[1];
-                }
-
-                return newEventNo;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-       
         public async Task<ServiceConfiguration> GetMailConfiguration()
         {
             var mailConfiguration = await _context.ServiceConfiguration.FirstOrDefaultAsync() ?? throw new NotFoundException("Mail configuration not found.");

@@ -114,7 +114,7 @@ public class AuthService : IAuthService
             var existEmployee = await _userRepo.GetRegistrationById(id);
             
             _mapper.Map(model, existEmployee);            
-            existEmployee.ModifiedAt = DateTimeOffset.UtcNow;
+            existEmployee.UpdatedDate = DateTime.UtcNow;
             return await _userRepo.UpdateRegistration(existEmployee);
         }
         catch (Exception)
