@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<RootNamespace>rayna.API</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.16" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.16" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.16" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.16">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.2.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\rayna.Common\rayna.Common.csproj" />
+	  <ProjectReference Include="..\rayna.Core\rayna.Core.csproj" />
+	  <ProjectReference Include="..\rayna.Persistence\rayna.Persistence.csproj" />
+	</ItemGroup>
+
+</Project>
