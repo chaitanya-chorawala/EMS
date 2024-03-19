@@ -4,13 +4,19 @@ namespace rayna.Common.model.Rayna
 {
     public class AddEventDto
     {
-        public string? Name { get; set; }
-        public DateTimeOffset? EventDate { get; set; }
-        public string? Address { get; set; }
-        public string? PhoneNo { get; set; }
-        public string? MobileNo { get; set; }
-        public string? EmailId { get; set; }
-        public string? OtherDetails { get; set; }
+        public string Name { get; set; }
+        public string? SubTitle { get; set; }
+        public int SupplierId { get; set; }
+        public int CountryId { get; set; }
+        public int StateId { get; set; }
+        public int CityId { get; set; }
+        public int InventoryId { get; set; }
+        public int TypeId { get; set; }
+        public int CategoryId { get; set; }
+        public int CurrencyId { get; set; }
+        public DateTime FromDateTime { get; set; }
+        public DateTime ToDateTime { get; set; }
+        public string? Description { get; set; }
         public List<IFormFile>? EventFiles { get; set; }
     }
 }

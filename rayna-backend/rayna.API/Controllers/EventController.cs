@@ -27,8 +27,20 @@ public class EventController : ControllerBase
     {
         return Ok(await _eventService.GetEvent(searchingParams, sortingParams, isCompleted));
     }
+
     /// <summary>
-    /// register event
+    /// get the event detail by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetEvent(int id)
+    {
+        return Ok(await _eventService.GetEventByIdAsync(id));
+    }
+
+    /// <summary>
+    /// Add event
     /// </summary>
     /// <param name="addEventDto"></param>
     /// <returns></returns>
@@ -36,5 +48,28 @@ public class EventController : ControllerBase
     public async Task<IActionResult> AddEvent([FromForm] AddEventDto addEventDto)
     {
         return Ok(await _eventService.AddEventAsync(addEventDto));
+    }
+
+    /// <summary>
+    /// Update event
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="addEventDto"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public async Task<IActionResult> UpdateEvent(int id,[FromForm] AddEventDto addEventDto)
+    {
+        return Ok(await _eventService.UpdateEventAsync(id, addEventDto));
+    }
+
+    /// <summary>
+    /// Delete event
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete]
+    public async Task<IActionResult> DeleteEvent(int id)
+    {
+        return Ok(await _eventService.DeleteEventAsync(id));
     }
 }

@@ -8,10 +8,11 @@ namespace rayna.Core.Contract.Repository
 {
     public interface IEventRepo
     {
-        Task<PaginationResponse<EventResponse>> GetEvent(bool? isCompleted, string? searchingParams, SortingParams sortingParams);        
-        Task<ServiceConfiguration> GetMailConfiguration();
-        Task<FormatConfiguration> GetMailFormate(string? type, string? status);
+        Task<PaginationResponse<EventResponse>> GetEvent(bool? isCompleted, string? searchingParams, SortingParams sortingParams);                        
         Task<FilePath> GetFilePath(string type);
-        Task<RegisterResponse> AddEvent(Event rayna);
+        Task<Event> GetEventById(int id);
+        Task<RegisterResponse> AddEvent(Event eve);
+        Task<RegisterResponse> UpdateEvent(Event eve);
+        Task<RegisterResponse> DeleteEvent(Event eve);
     }
 }

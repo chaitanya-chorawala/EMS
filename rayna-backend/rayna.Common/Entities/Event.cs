@@ -18,16 +18,12 @@ public class Event : Audit
     public DateTime FromDateTime { get; set; }
     public DateTime ToDateTime { get; set; }
     public string? Description { get; set; }
-    public int Status { get; set; }
-    
-    
-    #region Tables Relationship
-    //[ForeignKey(nameof(UserId))]
-    //public Registration? Registration { get; set; }  
-    //[InverseProperty(nameof(EventFiles.Rayna))]
-    //public IList<EventFiles>? EventFileList { get; set; }
-    //[InverseProperty(nameof(MailMaster.Rayna))]
-    //public IList<MailMaster>? MailMasters { get; set; }
+    public int Status { get; set; } = 0;
+
+
+    #region Tables Relationship    
+    [InverseProperty(nameof(EventFiles.Event))]
+    public IList<EventFiles>? EventFileList { get; set; }    
 
     #endregion
 }

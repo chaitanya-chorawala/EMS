@@ -10,5 +10,8 @@ namespace rayna.Core.Contract.Service
     {
         Task<PaginationResponse<EventResponse>> GetEvent(string? searchingParams, SortingParams sortingParams, bool? isCompleted);
         Task<RegisterResponse> AddEventAsync(AddEventDto addEventDto);
+        Task<RegisterResponse> UpdateEventAsync(int id, AddEventDto addEventDto);
+        Task<RegisterResponse> DeleteEventAsync(int id);
+        Task<EventResponse> GetEventByIdAsync(int id);
     }
 }
