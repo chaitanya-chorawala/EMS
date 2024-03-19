@@ -9,6 +9,8 @@ using Serilog;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
+using rayna.Persistence.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 try
 {
@@ -36,6 +38,21 @@ try
         });
     });
     // Add services to the container.
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    {
+        options.UseNpgsql(configuration.GetConnectionString("connStr"), sqlServerOptionsAction =>
+        {
+            sqlServerOptionsAction.CommandTimeout(180);
+            sqlServerOptionsAction.EnableRetryOnFailure(2);
+            sqlServerOptionsAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+        });
+        options.EnableSensitiveDataLogging();
+        options.EnableDetailedErrors();
+        options.LogTo(Console.WriteLine);
+    });
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
     builder.Services.AddPersistenceServices(configuration);
 
 builder.Services.AddHttpContextAccessor();

@@ -8,7 +8,7 @@
         public string? Village { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
-        public DateTime? DOB { get; set; }
+        public DateOnly? DOB { get; set; }
         public string? UserName { get; set; }
         public string? Address { get; set; }
         public string? Email { get; set; }
