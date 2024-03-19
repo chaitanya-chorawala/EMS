@@ -38,7 +38,7 @@ namespace rayna.Persistence.Repository
                 else
                 {
                     source = _context.Event;
-                }
+                }                
 
                 events = _mapper.ProjectTo<EventResponse>(source).AsQueryable();
 
@@ -69,20 +69,6 @@ namespace rayna.Persistence.Repository
             }
         }
 
-        public async Task<ServiceConfiguration> GetMailConfiguration()
-        {
-            var mailConfiguration = await _context.ServiceConfiguration.FirstOrDefaultAsync() ?? throw new NotFoundException("Mail configuration not found.");
-
-            return mailConfiguration;
-        }
-
-        public async Task<FormatConfiguration> GetMailFormate(string? type, string? status)
-        {
-            var mailFormate = await _context.FormatConfiguration.Where(x => x.Type == type && x.Status == status).FirstOrDefaultAsync() ?? throw new NotFoundException("Mail formate not found.");
-
-            return mailFormate;
-        }
-
         public async Task<FilePath> GetFilePath(string type)
         {
             try
@@ -91,7 +77,7 @@ namespace rayna.Persistence.Repository
 
                 if (filePath == null)
                 {
-                    throw new NotFoundException("File Path Not Found");
+                    filePath = new FilePath() { Path = AppDomain.CurrentDomain.BaseDirectory, Type = "Event" };
                 }
 
                 return filePath;
@@ -102,14 +88,56 @@ namespace rayna.Persistence.Repository
             }
         }
 
-        public async Task<RegisterResponse> AddEvent(Event rayna)
+        public async Task<RegisterResponse> AddEvent(Event eve)
         {
             try
             {
-                await _context.Event.AddAsync(rayna);
+                await _context.Event.AddAsync(eve);
                 await _context.SaveChangesAsync();
 
-                return new RegisterResponse() { Message = "Rayna added successfully." };
+                return new RegisterResponse() { Message = "Event added successfully." };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<RegisterResponse> UpdateEvent(Event eve)
+        {
+            try
+            {
+                _context.Event.Update(eve);
+                await _context.SaveChangesAsync();
+
+                return new RegisterResponse() { Message = "Event updated successfully." };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<RegisterResponse> DeleteEvent(Event eve)
+        {
+            try
+            {
+                _context.Event.Remove(eve);
+                await _context.SaveChangesAsync();
+
+                return new RegisterResponse() { Message = "Event deleted successfully." };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Event> GetEventById(int id)
+        {
+            try
+            {
+                return await _context.Event.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("Event not found");
             }
             catch (Exception)
             {

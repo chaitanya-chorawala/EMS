@@ -8,7 +8,7 @@ public class EventProfile : Profile
 {
     public EventProfile()
     {
-        CreateMap<AddEventDto, Event>();
-        CreateMap<Event, EventResponse>();
+        CreateMap<Event, AddEventDto>().ReverseMap();
+        CreateMap<Event, EventResponse>().ReverseMap();
     }
 }

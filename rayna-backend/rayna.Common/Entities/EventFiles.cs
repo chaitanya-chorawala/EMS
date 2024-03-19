@@ -8,6 +8,6 @@ public class EventFiles : Audit
     public string? FilePath { get; set; }
     public string? FileName { get; set; }
 
-    public virtual Event? Rayna { get; set; }
+    public virtual Event? Event { get; set; }
 }
     
