@@ -14,6 +14,9 @@ public class RegistrationValidator : AbstractValidator<Register>
         RuleFor(x => x.Email).EmailAddress().WithMessage("Email is not valid");
         RuleFor(x => x.PhoneNo).Length(10).WithMessage("Phone number must have 10 digits");
         RuleFor(x => x.Address).NotEmpty().WithMessage("Require Address");
-        RuleFor(x => x.Password).NotEmpty().WithMessage("Required").Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,50}$").WithMessage("should be minimum 8 character, one upper letter and special character");
+        RuleFor(x => x.Password)
+            .NotEmpty().WithMessage("Required")
+            .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,50}$")
+            .WithMessage("Password should be minimum 8 character, one upper letter and special character");
     }
 }

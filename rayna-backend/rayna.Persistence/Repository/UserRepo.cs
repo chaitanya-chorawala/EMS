@@ -25,7 +25,7 @@ public class UserRepo : IUserRepo
         try
         {
             RegistrationResponse? user = await _context.Registration
-                .Where(x => x.IsActive && x.Id == userid)
+                .Where(x => x.Id == userid)
                 .Select(RegistrationResponse.ToDTO())
                 .AsNoTracking()
                 .FirstOrDefaultAsync() ?? throw new NotFoundException("User not found"); ;
@@ -44,15 +44,14 @@ public class UserRepo : IUserRepo
         if (searchingParams is not null)
         {
             users = _context.Registration
-                    .Where(x => x.IsActive
-                                && (x.FirstName + " " + x.MiddleName + " " + x.LastName).ToLower().Contains(searchingParams.ToLower()                                    
+                    .Where(x => (x.FirstName + " " + x.MiddleName + " " + x.LastName).ToLower().Contains(searchingParams.ToLower()                                    
                                     ))
                      .Select(RegistrationResponse.ToDTO())
                      .AsQueryable();
         }
         else
         {
-            users = _context.Registration.Where(x => x.IsActive)
+            users = _context.Registration
                     .Select(RegistrationResponse.ToDTO())
                     .AsQueryable();
         }
@@ -83,7 +82,7 @@ public class UserRepo : IUserRepo
         try
         {
             User? user = await _context.Registration
-                .Where(x => x.IsActive && x.UserName == model.Username && x.Password == model.Password)
+                .Where(x => x.UserName == model.Username && x.Password == model.Password)
                 .Select(x => new User
                 {
                     Id = x.Id,
@@ -108,7 +107,7 @@ public class UserRepo : IUserRepo
         try
         {           
             var userExists = await _context.Registration
-                .AnyAsync(x => x.IsActive && x.UserName == registration.UserName);
+                .AnyAsync(x => x.UserName == registration.UserName);
 
             if (userExists)
                 throw new BadRequestException("UserName already exists!");
@@ -129,7 +128,7 @@ public class UserRepo : IUserRepo
         try
         {           
             var userExists = await _context.Registration
-                .AnyAsync(x => x.Id != registration.Id && x.IsActive && x.UserName == registration.UserName);
+                .AnyAsync(x => x.Id != registration.Id  && x.UserName == registration.UserName);
 
             if (userExists)
                 throw new BadRequestException("UserName already exists!");
@@ -149,10 +148,10 @@ public class UserRepo : IUserRepo
     {
         try
         {
-            var existEmployee = await _context.Registration.FirstOrDefaultAsync(x => x.Id == id && x.IsActive) ?? throw new NotFoundException("Employee not found.");
+            var existEmployee = await _context.Registration.FirstOrDefaultAsync(x => x.Id == id ) ?? throw new NotFoundException("Employee not found.");
 
-            existEmployee.DeletedAt = DateTimeOffset.UtcNow;
-            existEmployee.IsActive = false;
+            //existEmployee.DeletedAt = DateTimeOffset.UtcNow;
+            //existEmployee.IsActive = false;
 
             _context.Registration.Update(existEmployee);
             await _context.SaveChangesAsync();
@@ -170,12 +169,13 @@ public class UserRepo : IUserRepo
         try
         {
             var existedRefreshToken = await _context.UserJwtRefreshToken
-                .Where(x => x.IsActive && x.UserId == userid).FirstOrDefaultAsync();
+                .Where(x => 
+                x.UserId == userid).FirstOrDefaultAsync();
 
             if (existedRefreshToken is not null)
             {
                 existedRefreshToken.Token = refreshToken;
-                existedRefreshToken.ModifiedAt = DateTimeOffset.Now;
+                existedRefreshToken.UpdatedDate = DateTime.Now;
                 _context.Entry(existedRefreshToken).State = EntityState.Modified;
             }
             else
@@ -197,7 +197,7 @@ public class UserRepo : IUserRepo
         try
         {
             var token = await _context.UserJwtRefreshToken
-                .Where(x => x.IsActive && x.UserId == userid && x.Token == refreshToken)
+                .Where(x =>  x.UserId == userid && x.Token == refreshToken)
                 .Select(x => x.Token)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -213,7 +213,7 @@ public class UserRepo : IUserRepo
     }
     public async Task<int> GetUserEmail(string emailId, int? id)
     {
-        var user = await _context.Registration.Where(x => (id == null || x.Id != id) && x.Email == emailId && x.IsActive).FirstOrDefaultAsync();
+        var user = await _context.Registration.Where(x => (id == null || x.Id != id) && x.Email == emailId).FirstOrDefaultAsync();
         if (user == null)
         {
             return 1;
@@ -225,7 +225,7 @@ public class UserRepo : IUserRepo
     {
         try
         {
-            return await _context.Registration.Where(x => x.Id == id && x.IsActive).FirstOrDefaultAsync() ?? throw new NotFoundException("Employee not found for update.");
+            return await _context.Registration.Where(x => x.Id == id ).FirstOrDefaultAsync() ?? throw new NotFoundException("Employee not found for update.");
         }
         catch (Exception)
         {

@@ -20,18 +20,6 @@ public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseNpgsql(configuration.GetConnectionString("connStr"), sqlServerOptionsAction =>
-            {
-                sqlServerOptionsAction.CommandTimeout(180);
-                sqlServerOptionsAction.EnableRetryOnFailure(2);
-            });
-            options.EnableSensitiveDataLogging();
-            options.EnableDetailedErrors();
-            options.LogTo(Console.WriteLine);
-        });
-
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.TryAddScoped<IUserRepo, UserRepo>();
