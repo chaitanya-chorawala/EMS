@@ -1,16 +1,15 @@
 ﻿using ems.Common.Entities;
 using ems.Common.ExceptionHandler;
 using ems.Persistence.Configuration;
-using Microsoft.AspNetCore.Diagnostics;
+using Newtonsoft.Json;
 using Serilog;
-using System.Text;
 
 namespace ems.API.MiddlewareConfiguration;
 
 public class RequestResponseLoggingMiddleware
 {
     private readonly RequestDelegate _next;
-
+    
     public RequestResponseLoggingMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -81,8 +80,8 @@ public class RequestResponseLoggingMiddleware
         }
         finally
         {
-            dbContext.APILogs.Add(apiLog);
-            await dbContext.SaveChangesAsync();
+            string log = JsonConvert.SerializeObject(apiLog);
+            Log.Information(log);
         }
     }
 }

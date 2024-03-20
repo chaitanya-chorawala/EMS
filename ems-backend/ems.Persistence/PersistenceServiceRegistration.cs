@@ -1,18 +1,16 @@
-﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using ems.Common.model.Auth;
+﻿using ems.Common.model.Auth;
 using ems.Common.model.Event;
 using ems.Core.Contract.Common;
 using ems.Core.Contract.Repository;
 using ems.Core.Contract.Service;
 using ems.Persistence.Common;
-using ems.Persistence.Configuration;
 using ems.Persistence.Repository;
 using ems.Persistence.Service;
 using ems.Persistence.Validation;
+using FluentValidation;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ems.Persistence;
 

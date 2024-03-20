@@ -11,12 +11,35 @@ using System.Reflection;
 using System.Text;
 using ems.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Events;
+using Serilog.Debugging;
+using System.Diagnostics;
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
     ConfigurationManager configuration = builder.Configuration;
 
+    var connectionString = configuration.GetConnectionString("connStr");
+    
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Information()
+        .WriteTo.PostgreSQL(
+       connectionString,
+       tableName: "Logs",
+       schemaName: "Logging",
+       restrictedToMinimumLevel: LogEventLevel.Information,
+       needAutoCreateTable: true,       
+       respectCase: true)
+        .CreateLogger();
+
+    SelfLog.Enable(msg =>
+    {
+        Debug.Print(msg);
+        Debugger.Break();
+    });
+
+    Log.Information("Application started");
     //g-zip for faster response
     builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     {
