@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -24,4 +25,12 @@ public record Section : Audit
 
     [MaxLength]
     public string? SeatMapData { get; set; }
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(TicketCategoryId))]
+    public TicketCategory TicketCategory { get; set; }
+
+    [InverseProperty(nameof(Seat.Section))]
+    public IList<Seat>? SeatList { get; set; }
+    #endregion
 }

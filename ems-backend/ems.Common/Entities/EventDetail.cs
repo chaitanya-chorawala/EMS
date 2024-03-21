@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -20,5 +22,16 @@ public record EventDetail : Audit
     public string? DefaultImageUrl { get; set; }
     public decimal Latitude { get; set; }
     public decimal Longitude { get; set; }
-    public int TimezoneId { get; set; }
+    public int? TimezoneId { get; set; }
+
+    #region Tables Relationship        
+    [ForeignKey(nameof(EventId))]
+    public Event Event { get; set; }
+
+    [ForeignKey(nameof(VenueId))]
+    public Venue Venue { get; set; }
+
+    [ForeignKey(nameof(EventAccessId))]
+    public virtual MasterDataMapping EventAccess { get; set; }
+    #endregion
 }

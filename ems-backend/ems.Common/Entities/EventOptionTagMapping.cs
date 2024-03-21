@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -12,4 +13,12 @@ public record EventOptionTagMapping : Audit
 
     [Required]
     public int TagId { get; set; }
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(EventOptionMasterId))]
+    public EventOptionMaster EventOptionMaster { get; set; }
+
+    [ForeignKey(nameof(TagId))]
+    public Tags Tag { get; set; }
+    #endregion
 }

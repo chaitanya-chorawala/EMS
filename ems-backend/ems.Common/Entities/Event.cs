@@ -47,8 +47,27 @@ public record Event : Audit
     public string? Description { get; set; }        
 
     #region Tables Relationship    
-    [InverseProperty(nameof(EventMedia.Event))]
-    public IList<EventMedia>? EventFileList { get; set; }
+    [ForeignKey(nameof(InventoryId))]
+    public virtual MasterDataMapping Inventory { get; set; }
+    [ForeignKey(nameof(TypeId))]
+    public virtual MasterDataMapping Type { get; set; }
+    [ForeignKey(nameof(CategoryId))]
+    public virtual MasterDataMapping Category { get; set; }
 
+
+    [InverseProperty(nameof(EventMedia.Event))]
+    public IList<EventMedia>? EventMediaList { get; set; }
+
+    [InverseProperty(nameof(EventDetail.Event))]
+    public IList<EventDetail>? EventDetailList { get; set; }
+
+    [InverseProperty(nameof(EventTagMapping.Event))]
+    public IList<EventTagMapping>? EventTagMappingList { get; set; }
+
+    [InverseProperty(nameof(EventAgenda.Event))]
+    public IList<EventAgenda>? EventAgendaList { get; set; }
+
+    [InverseProperty(nameof(Ticket.Event))]
+    public IList<Ticket>? TicketList { get; set; }
     #endregion
 }

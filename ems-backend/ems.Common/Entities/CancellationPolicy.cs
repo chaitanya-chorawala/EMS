@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -28,4 +29,13 @@ public record CancellationPolicy : Audit
     public int CancellationValueTypeId { get; set; }
 
     public int? DisplaySortOrder { get; set; }
+
+    #region Tables Relationship            
+
+    [ForeignKey(nameof(CancellationValueTypeId))]
+    public virtual MasterDataMapping CancellationValueType { get; set; }
+
+    [InverseProperty(nameof(TicketCategory.CancellationPolicy))]
+    public IList<TicketCategory>? TicketCategoryList { get; set; }
+    #endregion
 }

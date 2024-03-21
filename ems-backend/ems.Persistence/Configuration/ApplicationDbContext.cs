@@ -19,6 +19,28 @@ public class ApplicationDbContext : DbContext
     public DbSet<MailMaster> MailMaster { get; set; }
     public DbSet<MailAttachment> MailAttachment { get; set; }
     public DbSet<APILogs> APILogs { get; set; }
+    public DbSet<MasterDataMapping> MasterDataMapping { get; set; }
+    public DbSet<EventDetail> EventDetail { get; set; }
+    public DbSet<CancellationPolicy> CancellationPolicy { get; set; }
+    public DbSet<EventOptionMaster> EventOptionMaster { get; set; }
+    public DbSet<EventOptionTimeSlot> EventOptionTimeSlot { get; set; }
+    public DbSet<EventDescriptionSection> EventDescriptionSection { get; set; }
+    public DbSet<Tags> Tags { get; set; }
+    public DbSet<EventTagMapping> EventTagMapping { get; set; }
+    public DbSet<EventOptionTagMapping> EventOptionTagMapping { get; set; }
+    public DbSet<EventAgenda> EventAgenda { get; set; }
+    public DbSet<Venue> Venue { get; set; }
+    public DbSet<VenueEventTimeSlotMapping> VenueEventTimeSlotMapping { get; set; }
+    public DbSet<TicketCategory> TicketCategory { get; set; }
+    public DbSet<TicketCategoryPaxTypeMapping> TicketCategoryPaxTypeMapping { get; set; }
+    public DbSet<Section> Section { get; set; }
+    public DbSet<Seat> Seat { get; set; }
+    public DbSet<EventCostMaster> EventCostMaster { get; set; }
+    public DbSet<CostMasterAuditLog> CostMasterAuditLog { get; set; }
+    public DbSet<EventTarrifWiseSellMaster> EventTarrifWiseSellMaster { get; set; }
+    public DbSet<EventAgentWiseSellMaster> EventAgentWiseSellMaster { get; set; }
+    public DbSet<EventSellMasterAuditLog> EventSellMasterAuditLog { get; set; }
+    public DbSet<Ticket> Ticket { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

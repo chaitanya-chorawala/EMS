@@ -87,7 +87,7 @@ public class EventService : IEventService
         if (addEventDto.EventFiles is not null)
         {
             var (directoryPath, localPath) = await GetFileAndDirectoryPath();            
-            mapEvent.EventFileList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
+            mapEvent.EventMediaList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
         }        
         
         return await _eventRepo.AddEvent(mapEvent);
@@ -109,7 +109,7 @@ public class EventService : IEventService
         if (addEventDto.EventFiles is not null)
         {
             var (directoryPath, localPath) = await GetFileAndDirectoryPath();
-            existingEvent.EventFileList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
+            existingEvent.EventMediaList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
         }
 
         return await _eventRepo.UpdateEvent(existingEvent);

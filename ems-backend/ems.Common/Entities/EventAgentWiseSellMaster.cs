@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -10,5 +11,10 @@ public record EventAgentWiseSellMaster : Audit
     public int? AgentId { get; set; }
     public int? MarkupTypeId { get; set; }
     public decimal? MarkupAmount { get; set; }
-    public decimal? SellAmount { get; set; }
+    public decimal SellAmount { get; set; } = 0;
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(EventCostMasterId))]
+    public EventCostMaster? EventCostMaster { get; set; }
+    #endregion
 }

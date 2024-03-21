@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -27,4 +28,9 @@ public record EventAgenda : Audit
     
     [MaxLength(1024)]
     public string? Description { get; set; }
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(EventId))]
+    public Event Event { get; set; }
+    #endregion
 }

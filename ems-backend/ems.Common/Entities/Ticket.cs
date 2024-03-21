@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -15,4 +16,12 @@ public record Ticket : Audit
     public int? TicketIssueTypeId { get; set; }
     public int? ShowTicketAvailability { get; set; }
     public int? AllowDuplicateAttendees { get; set; }
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(EventId))]
+    public Event Event { get; set; }
+
+    [ForeignKey(nameof(TicketCategoryId))]
+    public TicketCategory TicketCategory { get; set; }
+    #endregion
 }

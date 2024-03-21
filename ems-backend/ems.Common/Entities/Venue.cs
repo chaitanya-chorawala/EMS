@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -20,4 +22,13 @@ public record Venue : Audit
 
     [Required]
     public int AgeLimit { get; set; }
+
+
+    #region Tables Relationship       
+    [InverseProperty(nameof(EventDetail.Venue))]
+    public IList<EventDetail>? EventDetailList { get; set; }
+
+    [InverseProperty(nameof(VenueEventTimeSlotMapping.Venue))]
+    public IList<VenueEventTimeSlotMapping>? VenueEventTimeSlotMappingList { get; set; }
+    #endregion
 }

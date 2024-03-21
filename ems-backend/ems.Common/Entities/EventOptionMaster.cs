@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -47,4 +48,15 @@ public record EventOptionMaster : Audit
     public int? MultiPax { get; set; }    
     public string? Inclusion { get; set; }
     public string? Exclusion { get; set; }
+
+    #region Tables Relationship        
+    [ForeignKey(nameof(EventId))]
+    public Event Event { get; set; }
+
+    [InverseProperty(nameof(EventOptionTimeSlot.EventOptionMaster))]
+    public IList<EventOptionTimeSlot>? EventOptionTimeSlotList { get; set; }
+
+    [InverseProperty(nameof(EventOptionTagMapping.EventOptionMaster))]
+    public IList<EventOptionTagMapping>? EventOptionTagMappingList { get; set; }
+    #endregion
 }

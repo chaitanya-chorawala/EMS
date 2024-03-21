@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
@@ -39,4 +40,24 @@ public record TicketCategory : Audit
     public decimal? IsAmountOff { get; set; }
     public decimal? QuantitySold { get; set; }
     public int? IsPdfTicket { get; set; }
+
+    #region Tables Relationship  
+    [ForeignKey(nameof(EventOptionTimeSlotId))]
+    public EventOptionTimeSlot EventOptionTimeSlot { get; set; }
+
+    [ForeignKey(nameof(CancellationPolicyId))]
+    public CancellationPolicy CancellationPolicy { get; set; }
+
+    [ForeignKey(nameof(PaymentMethodId))]
+    public virtual MasterDataMapping PaymentMethod { get; set; }
+
+    [InverseProperty(nameof(TicketCategoryPaxTypeMapping.TicketCategory))]
+    public IList<TicketCategoryPaxTypeMapping>? TicketCategoryPaxTypeMappingList { get; set; }
+
+    [InverseProperty(nameof(Section.TicketCategory))]
+    public IList<Section>? SectionList { get; set; }
+
+    [InverseProperty(nameof(Ticket.TicketCategory))]
+    public IList<Ticket>? TicketList { get; set; }
+    #endregion
 }
