@@ -2,7 +2,7 @@
 
 namespace ems.Common.Entities
 {
-    public class Registration : Audit
+    public record Registration : Audit
     {
         public int Id { get; set; }
         public string? FirstName { get; set; }

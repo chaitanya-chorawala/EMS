@@ -48,13 +48,13 @@ public class EventService : IEventService
         return (directoryPath, localPath);
     }
 
-    private IList<EventFiles> UploadEventFiles(IList<IFormFile> files, string directoryPath, string localPath) 
+    private IList<EventMedia> UploadEventFiles(IList<IFormFile> files, string directoryPath, string localPath) 
     {
-        IList<EventFiles> eventFiles = new List<EventFiles>();
+        IList<EventMedia> eventFiles = new List<EventMedia>();
 
         foreach (var file in files)
         {
-            EventFiles eventFile = new EventFiles();
+            EventMedia eventFile = new EventMedia();
 
             var fileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             localPath = Path.Combine(directoryPath + fileName);
@@ -64,8 +64,8 @@ public class EventService : IEventService
                 file.CopyTo(fs);
             }
 
-            eventFile.FileName = fileName;
-            eventFile.FilePath = localPath;
+            eventFile.Name = fileName;
+            eventFile.Url = localPath;
 
             eventFiles.Add(eventFile);
         }

@@ -137,7 +137,7 @@ namespace ems.Persistence.Repository
         {
             try
             {
-                return await _context.Event.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException("Event not found");
+                return await _context.Event.FirstOrDefaultAsync(x => x.EventId == id) ?? throw new NotFoundException("Event not found");
             }
             catch (Exception)
             {
