@@ -1,29 +1,73 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
-public class Event : Audit
+public record Event : Audit
 {
-    public int Id { get; set; }        
+    [Key]
+    public int EventId { get; set; }        
+    [MaxLength(1024)]
     public string? Name { get; set; }
-    public string? SubTitle { get; set; }
-    public int SupplierId { get; set; }
-    public int CountryId { get; set; }
-    public int StateId { get; set; }
-    public int CityId { get; set; }
-    public int InventoryId { get; set; }
-    public int TypeId { get; set; }
-    public int CategoryId { get; set; }
-    public int CurrencyId { get; set; }
-    public DateTime FromDateTime { get; set; }
-    public DateTime ToDateTime { get; set; }
-    public string? Description { get; set; }
-    public int Status { get; set; } = 0;
 
+    [MaxLength(1024)]
+    public string? SubTitle { get; set; }
+
+    [Required]
+    public int SupplierId { get; set; }
+    
+    [Required]
+    public int CountryId { get; set; }
+    
+    [Required]
+    public int StateId { get; set; }
+    
+    [Required]
+    public int CityId { get; set; }
+    
+    [Required]
+    public int InventoryId { get; set; }
+    
+    [Required]
+    public int TypeId { get; set; }
+    
+    [Required]
+    public int CategoryId { get; set; }
+    
+    [Required]
+    public int CurrencyId { get; set; }
+    
+    [Required]
+    public DateTime FromDateTime { get; set; }
+    
+    [Required]
+    public DateTime ToDateTime { get; set; }
+    
+    [MaxLength(1024)]
+    public string? Description { get; set; }        
 
     #region Tables Relationship    
-    [InverseProperty(nameof(EventFiles.Event))]
-    public IList<EventFiles>? EventFileList { get; set; }    
+    [ForeignKey(nameof(InventoryId))]
+    public virtual MasterDataMapping Inventory { get; set; }
+    [ForeignKey(nameof(TypeId))]
+    public virtual MasterDataMapping Type { get; set; }
+    [ForeignKey(nameof(CategoryId))]
+    public virtual MasterDataMapping Category { get; set; }
 
+
+    [InverseProperty(nameof(EventMedia.Event))]
+    public IList<EventMedia>? EventMediaList { get; set; }
+
+    [InverseProperty(nameof(EventDetail.Event))]
+    public IList<EventDetail>? EventDetailList { get; set; }
+
+    [InverseProperty(nameof(EventTagMapping.Event))]
+    public IList<EventTagMapping>? EventTagMappingList { get; set; }
+
+    [InverseProperty(nameof(EventAgenda.Event))]
+    public IList<EventAgenda>? EventAgendaList { get; set; }
+
+    [InverseProperty(nameof(Ticket.Event))]
+    public IList<Ticket>? TicketList { get; set; }
     #endregion
 }

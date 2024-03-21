@@ -106,7 +106,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-==CREATE TABLE [dbo].[CancellationPolicy](
+CREATE TABLE [dbo].[CancellationPolicy](
 	[CancellationPolicyId] [int] IDENTITY(1,1) NOT NULL,
 	[CancellationName] [nvarchar](1024) NULL,
 	[Description] [nvarchar](4000) NULL,
@@ -177,7 +177,7 @@ GO
 ALTER TABLE EventOptionMaster ADD CONSTRAINT FK_EventOptionMasterEventId FOREIGN KEY (EventId) REFERENCES [Event](EventId);
 GO
 
-==CREATE TABLE [dbo].[EventOptionTimeSlot](
+CREATE TABLE [dbo].[EventOptionTimeSlot](
 	[EventOptionTimeSlotId] [int] IDENTITY(1,1) NOT NULL,
 	[EventOptionMasterId] [int] NOT NULL,
 	[Name] [nvarchar](1024) NULL,

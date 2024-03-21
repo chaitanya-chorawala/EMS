@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ems.Common.Entities;
 
-public class JwtRefreshToken: Audit
+public record JwtRefreshToken: Audit
 {
     [Key]
     public int UserId { get; set; }
