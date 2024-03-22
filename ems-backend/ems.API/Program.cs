@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Serilog.Events;
 using Serilog.Debugging;
 using System.Diagnostics;
+using NpgsqlTypes;
+using Serilog.Sinks.PostgreSQL;
 
 try
 {
@@ -21,15 +23,34 @@ try
     ConfigurationManager configuration = builder.Configuration;
 
     var connectionString = configuration.GetConnectionString("connStr");
-    
-    Log.Logger = new LoggerConfiguration()
+
+    IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+    {
+        {"raiseAt", new TimestampColumnWriter() },
+        {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
+        {"message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
+        {"Method", new SinglePropertyColumnWriter("Method", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"Host", new SinglePropertyColumnWriter("Host", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"Path", new SinglePropertyColumnWriter("Path", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"StatusCode", new SinglePropertyColumnWriter("StatusCode", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"RequestAt", new SinglePropertyColumnWriter("RequestAt", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"ResponseAt", new SinglePropertyColumnWriter("ResponseAt", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"QueryString", new SinglePropertyColumnWriter("QueryString", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"RequestBody", new SinglePropertyColumnWriter("RequestBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"ResponseBody", new SinglePropertyColumnWriter("ResponseBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"exception", new ExceptionColumnWriter() }
+    };
+
+
+Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .WriteTo.PostgreSQL(
        connectionString,
        tableName: "Logs",
        schemaName: "Logging",
+       columnOptions: columnWriters,
        restrictedToMinimumLevel: LogEventLevel.Information,
-       needAutoCreateTable: true,       
+       needAutoCreateTable: true,
        respectCase: true)
         .CreateLogger();
 
@@ -78,7 +99,7 @@ try
 
     builder.Services.AddPersistenceServices(configuration);
 
-builder.Services.AddHttpContextAccessor();
+    builder.Services.AddHttpContextAccessor();
     builder.Services.AddControllers().AddNewtonsoftJson(options =>
     {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -153,7 +174,7 @@ builder.Services.AddHttpContextAccessor();
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "EMS Event APIs");
     });
-  
+
 
     app.UseHttpsRedirection();
 
@@ -170,6 +191,6 @@ builder.Services.AddHttpContextAccessor();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex.Message);
+    Log.Fatal(ex, ex.Message);
     throw;
 }

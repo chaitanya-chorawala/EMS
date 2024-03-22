@@ -1,7 +1,6 @@
 ﻿using ems.Common.Entities;
 using ems.Common.ExceptionHandler;
 using ems.Persistence.Configuration;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace ems.API.MiddlewareConfiguration;
@@ -9,7 +8,7 @@ namespace ems.API.MiddlewareConfiguration;
 public class RequestResponseLoggingMiddleware
 {
     private readonly RequestDelegate _next;
-    
+
     public RequestResponseLoggingMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -27,6 +26,7 @@ public class RequestResponseLoggingMiddleware
 
     public async Task Invoke(HttpContext context, ApplicationDbContext dbContext)
     {
+        Exception exception = null;
         DateTimeOffset reqDateTime = DateTimeOffset.UtcNow;
         APILogs apiLog = new APILogs()
         {
@@ -48,6 +48,7 @@ public class RequestResponseLoggingMiddleware
         }
         catch (Exception ex)
         {
+            exception = ex;
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
 
@@ -59,13 +60,7 @@ public class RequestResponseLoggingMiddleware
                 NotFoundException => StatusCodes.Status404NotFound,
                 _ => StatusCodes.Status500InternalServerError
             };
-
-            if (context.Response.StatusCode == StatusCodes.Status500InternalServerError)
-            {
-                Log.Error(ex.Message);
-                apiLog.Exception = ex.ToString();
-            }
-
+            
             string resBody = new ErrorDetail()
             {
                 StatusCode = context.Response.StatusCode,
@@ -80,8 +75,25 @@ public class RequestResponseLoggingMiddleware
         }
         finally
         {
-            string log = JsonConvert.SerializeObject(apiLog);
-            Log.Information(log);
+            
+            if (exception != null)
+                Log.Error(exception,"{message} {message_template} {Method} {Host} {Path} {StatusCode} {RequestAt} {ResponseAt} {QueryString} {RequestBody} {ResponseBody}",
+           exception.Message,
+           "",
+           apiLog.Method,apiLog.Host,apiLog.Path,apiLog.StatusCode,
+           apiLog.RequestAt,apiLog.ResponseAt,
+           apiLog.QueryString,
+           apiLog.RequestBody,apiLog.ResponseBody
+           );
+            else
+                Log.Information("{message} {message_template} {Method} {Host} {Path} {StatusCode} {RequestAt} {ResponseAt} {QueryString} {RequestBody} {ResponseBody}",
+           "API Called",
+           "",
+           apiLog.Method,apiLog.Host,apiLog.Path,apiLog.StatusCode,
+           apiLog.RequestAt,apiLog.ResponseAt,
+           apiLog.QueryString,
+           apiLog.RequestBody,apiLog.ResponseBody           
+           );
         }
     }
 }
