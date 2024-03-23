@@ -42,7 +42,7 @@ namespace ems.Persistence.Repository
 
                 events = _mapper.ProjectTo<EventResponse>(source).AsQueryable();
 
-                var totalCount = await events.CountAsync();
+                var totalCount = await source.CountAsync();
                 double? pageCount = Math.Ceiling(totalCount / sortingParams.PageSize);
 
                 var sortedData = SortingExtensions.ApplySorting(events, sortingParams.SortBy, sortingParams.IsSortAscending);

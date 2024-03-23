@@ -27,17 +27,16 @@ try
     IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
     {
         {"raiseAt", new TimestampColumnWriter() },
-        {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-        {"message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-        {"Method", new SinglePropertyColumnWriter("Method", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
-        {"Host", new SinglePropertyColumnWriter("Host", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
-        {"Path", new SinglePropertyColumnWriter("Path", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },        
+        {"Method", new SinglePropertyColumnWriter("Method", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
+        {"Host", new SinglePropertyColumnWriter("Host", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
+        {"Path", new SinglePropertyColumnWriter("Path", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
         {"StatusCode", new SinglePropertyColumnWriter("StatusCode", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
         {"RequestAt", new SinglePropertyColumnWriter("RequestAt", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
         {"ResponseAt", new SinglePropertyColumnWriter("ResponseAt", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
-        {"QueryString", new SinglePropertyColumnWriter("QueryString", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
-        {"RequestBody", new SinglePropertyColumnWriter("RequestBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
-        {"ResponseBody", new SinglePropertyColumnWriter("ResponseBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text) },
+        {"QueryString", new SinglePropertyColumnWriter("QueryString", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
+        {"RequestBody", new SinglePropertyColumnWriter("RequestBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
+        {"ResponseBody", new SinglePropertyColumnWriter("ResponseBody", PropertyWriteMethod.ToString,NpgsqlDbType.Text, "l") },
         {"exception", new ExceptionColumnWriter() }
     };
 
