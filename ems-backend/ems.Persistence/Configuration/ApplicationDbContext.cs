@@ -17,8 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<JwtRefreshToken> UserJwtRefreshToken { get; set; }
     public DbSet<ServiceConfiguration> ServiceConfiguration { get; set; }
     public DbSet<MailMaster> MailMaster { get; set; }
-    public DbSet<MailAttachment> MailAttachment { get; set; }
-    public DbSet<APILogs> APILogs { get; set; }
+    public DbSet<MailAttachment> MailAttachment { get; set; }    
     public DbSet<MasterDataMapping> MasterDataMapping { get; set; }
     public DbSet<EventDetail> EventDetail { get; set; }
     public DbSet<CancellationPolicy> CancellationPolicy { get; set; }

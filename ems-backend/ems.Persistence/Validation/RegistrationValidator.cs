@@ -7,9 +7,7 @@ public class RegistrationValidator : AbstractValidator<Register>
 {
     public RegistrationValidator()
     {
-        RuleFor(x => x.FirstName).NotEmpty().WithMessage("Require firstName");
-        RuleFor(x => x.MiddleName).NotEmpty().WithMessage("Require middleName");
-        RuleFor(x => x.LastName).NotEmpty().WithMessage("Require lastName");
+        RuleFor(x => x.DisplayName).NotEmpty().WithMessage("Require DisplayName");
         RuleFor(x => x.UserName).NotEmpty().WithMessage("Require userName");
         RuleFor(x => x.Email).EmailAddress().WithMessage("Email is not valid");
         RuleFor(x => x.PhoneNo).Length(10).WithMessage("Phone number must have 10 digits");

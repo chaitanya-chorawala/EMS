@@ -76,19 +76,17 @@ public class RequestResponseLoggingMiddleware
         finally
         {
             
-            if (exception != null)
-                Log.Error(exception,"{message} {message_template} {Method} {Host} {Path} {StatusCode} {RequestAt} {ResponseAt} {QueryString} {RequestBody} {ResponseBody}",
-           exception.Message,
-           "",
+            if (exception != null && context.Response.StatusCode == StatusCodes.Status500InternalServerError)
+                Log.Error(exception,"{message:l} {Method:l} {Host:l}{Path:l} {StatusCode} {RequestAt} {ResponseAt} {QueryString:l} {RequestBody:l} {ResponseBody:l}",
+           exception.Message,           
            apiLog.Method,apiLog.Host,apiLog.Path,apiLog.StatusCode,
            apiLog.RequestAt,apiLog.ResponseAt,
            apiLog.QueryString,
            apiLog.RequestBody,apiLog.ResponseBody
            );
             else
-                Log.Information("{message} {message_template} {Method} {Host} {Path} {StatusCode} {RequestAt} {ResponseAt} {QueryString} {RequestBody} {ResponseBody}",
-           "API Called",
-           "",
+                Log.Information("{message:l}: {Method:l} {Host:l}{Path:l} {StatusCode} {RequestAt} {ResponseAt} {QueryString:l} {RequestBody:l} {ResponseBody:l}",
+           "API Called",           
            apiLog.Method,apiLog.Host,apiLog.Path,apiLog.StatusCode,
            apiLog.RequestAt,apiLog.ResponseAt,
            apiLog.QueryString,

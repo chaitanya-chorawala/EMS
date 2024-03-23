@@ -5,9 +5,7 @@ namespace ems.Common.model.Auth
     public class RegistrationResponse
     {
         public int Id { get; set; }
-        public string? FirstName { get; set; }
-        public string? MiddleName { get; set; }
-        public string? LastName { get; set; }
+        public string? DisplayName { get; set; }
         public string? Village { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
@@ -34,9 +32,7 @@ namespace ems.Common.model.Auth
                     Address = x.Address,
                     Email = x.Email,
                     PhoneNo = x.PhoneNo,
-                    FirstName = x.FirstName,
-                    MiddleName = x.MiddleName,
-                    LastName = x.LastName
+                    DisplayName = x.DisplayName
                 };
             return exp;
         }

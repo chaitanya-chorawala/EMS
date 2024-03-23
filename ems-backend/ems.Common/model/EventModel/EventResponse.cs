@@ -1,10 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace ems.Common.model.Event
 {
     public class EventResponse
     {
-        public int Id { get; set; }
+        public int EventId { get; set; }
         public string? Name { get; set; }
         public string? SubTitle { get; set; }
         public int SupplierId { get; set; }
@@ -18,6 +19,5 @@ namespace ems.Common.model.Event
         public DateTime FromDateTime { get; set; }
         public DateTime ToDateTime { get; set; }
         public string? Description { get; set; }
-        public int Status { get; set; }
     }
 }

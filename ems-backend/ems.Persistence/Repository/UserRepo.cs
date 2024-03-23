@@ -44,7 +44,7 @@ public class UserRepo : IUserRepo
         if (searchingParams is not null)
         {
             users = _context.Registration
-                    .Where(x => (x.FirstName + " " + x.MiddleName + " " + x.LastName).ToLower().Contains(searchingParams.ToLower()                                    
+                    .Where(x => (x.UserName).ToLower().Contains(searchingParams.ToLower()                                    
                                     ))
                      .Select(RegistrationResponse.ToDTO())
                      .AsQueryable();
