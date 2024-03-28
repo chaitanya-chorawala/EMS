@@ -17,14 +17,14 @@ public class TokenGenerator : ITokenGenerator
     private readonly string _validAudience;
     private readonly string _validIssuer;
     private readonly string _secretKey;
-    private readonly IUserRepo _userRepo;
+    private readonly IRepoManager _repoManager;
 
-    public TokenGenerator(IConfiguration configuration, IUserRepo userRepo)
+    public TokenGenerator(IConfiguration configuration, IRepoManager repoManager)
     {
         _validAudience = configuration["JWT:ValidAudience"]!;
         _validIssuer = configuration["JWT:ValidIssuer"]!;
         _secretKey = configuration["JWT:Secret"]!;
-        _userRepo = userRepo;
+        _repoManager = repoManager;
     }
     public async Task<LoginResponse> GenerateTokenAsync(User user)
     {
@@ -81,7 +81,7 @@ public class TokenGenerator : ITokenGenerator
             if (username is null || userid is null)
                 throw new BadRequestException("Invalid access token");
 
-            var existingRefreshToken = await _userRepo.VerifyRefreshTokenAsync(Int16.Parse(userid), model.RefreshToken);
+            var existingRefreshToken = await _repoManager.UserRepo.VerifyRefreshTokenAsync(Int16.Parse(userid), model.RefreshToken);
 
             var tokenKey = Encoding.UTF8.GetBytes(_secretKey);
             var tokenHandler = new JwtSecurityToken(
@@ -116,7 +116,7 @@ public class TokenGenerator : ITokenGenerator
             string refreshToken = Convert.ToBase64String(randomNumber);
 
             //Save token to DB        
-            await _userRepo.UpdateRefreshTokenAsync(Int16.Parse(userid), refreshToken);
+            await _repoManager.UserRepo.UpdateRefreshTokenAsync(Int16.Parse(userid), refreshToken);
 
             return refreshToken;
         }

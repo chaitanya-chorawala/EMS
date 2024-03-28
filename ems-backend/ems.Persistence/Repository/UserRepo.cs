@@ -11,11 +11,11 @@ using System.Data;
 
 namespace ems.Persistence.Repository;
 
-public class UserRepo : IUserRepo
+public class UserRepo : RepoBase<User>, IUserRepo
 {
     private readonly ApplicationDbContext _context;
 
-    public UserRepo(ApplicationDbContext context)
+    public UserRepo(ApplicationDbContext context) : base(context)
     {
         _context = context;
     }
@@ -23,7 +23,7 @@ public class UserRepo : IUserRepo
     public async Task<RegistrationResponse> GetUserDetail(int userid)
     {
         try
-        {
+        {            
             RegistrationResponse? user = await _context.Registration
                 .Where(x => x.Id == userid)
                 .Select(RegistrationResponse.ToDTO())

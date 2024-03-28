@@ -14,15 +14,15 @@ namespace ems.Persistence.Service;
 public class AuthService : IAuthService
 {
     private readonly ITokenGenerator _tokenGenerator;
-    private readonly IUserRepo _userRepo;
+    private readonly IRepoManager _repoManager;
     private readonly IMapper _mapper;
     private readonly IValidator<Register> _validator;
     private readonly IValidator<RegisterDto> _updateValidator;
 
-    public AuthService(ITokenGenerator tokenGenerator, IUserRepo userRepo, IValidator<Register> validator, IMapper mapper, IValidator<RegisterDto> updateValidator)
+    public AuthService(ITokenGenerator tokenGenerator, IRepoManager repoManager, IValidator<Register> validator, IMapper mapper, IValidator<RegisterDto> updateValidator)
     {
         _tokenGenerator = tokenGenerator;
-        _userRepo = userRepo;
+        _repoManager = repoManager;
         _validator = validator;
         _mapper = mapper;
         _updateValidator = updateValidator;
@@ -33,7 +33,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            return await _userRepo.GetUserDetail(userid);
+            return await _repoManager.UserRepo.GetUserDetail(userid);
         }
         catch (Exception ex)
         {
@@ -45,7 +45,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            var user = await _userRepo.LoginAsync(model);
+            var user = await _repoManager.UserRepo.LoginAsync(model);
             return await _tokenGenerator.GenerateTokenAsync(user);
         }
         catch (Exception ex)
@@ -73,7 +73,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            var checkEmail = await _userRepo.GetUserEmail(model.Email, null);
+            var checkEmail = await _repoManager.UserRepo.GetUserEmail(model.Email, null);
             if (checkEmail == 0)
             {
                 throw new BadRequestException("Given email is already exsist");
@@ -86,7 +86,7 @@ public class AuthService : IAuthService
             }
 
             var mapUser = _mapper.Map<Registration>(model);            
-            return await _userRepo.RegisterAsync(mapUser);
+            return await _repoManager.UserRepo.RegisterAsync(mapUser);
         }
         catch (Exception)
         {
@@ -98,7 +98,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            var checkEmail = await _userRepo.GetUserEmail(model.Email, id);
+            var checkEmail = await _repoManager.UserRepo.GetUserEmail(model.Email, id);
             if (checkEmail == 0)
             {
                 throw new BadRequestException("Given email is already exsist");
@@ -111,11 +111,11 @@ public class AuthService : IAuthService
                 throw new BadRequestException(string.Join('|', res.Errors.ToList()));
             }
 
-            var existEmployee = await _userRepo.GetRegistrationById(id);
+            var existEmployee = await _repoManager.UserRepo.GetRegistrationById(id);
             
             _mapper.Map(model, existEmployee);            
             existEmployee.UpdatedDate = DateTime.UtcNow;
-            return await _userRepo.UpdateRegistration(existEmployee);
+            return await _repoManager.UserRepo.UpdateRegistration(existEmployee);
         }
         catch (Exception)
         {
@@ -127,7 +127,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            return await _userRepo.DeleteRegistration(id);
+            return await _repoManager.UserRepo.DeleteRegistration(id);
         }
         catch (Exception)
         {
@@ -139,7 +139,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            var users = await _userRepo.GetUserList(searchingParams, sortingParams);
+            var users = await _repoManager.UserRepo.GetUserList(searchingParams, sortingParams);
             return users;
         }
         catch (Exception)

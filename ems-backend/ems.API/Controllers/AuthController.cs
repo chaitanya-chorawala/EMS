@@ -11,11 +11,11 @@ namespace ems.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IServiceManager _serviceManager;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IServiceManager serviceManager)
     {
-        _authService = authService;
+        _serviceManager = serviceManager;
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(Login model)
     {
-        var response = await _authService.Login(model);
+        var response = await _serviceManager.AuthService.Login(model);
         return Ok(response);
     }
 
@@ -40,7 +40,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(Register model)
     {
-        var response = await _authService.Register(model);
+        var response = await _serviceManager.AuthService.Register(model);
         return Ok(response);
     }
 
@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
     [HttpPut("update-profile")]
     public async Task<IActionResult> UpdateEmployee(int id, RegisterDto model)
     {
-        return Ok(await _authService.UpdateRegistration(id, model));
+        return Ok(await _serviceManager.AuthService.UpdateRegistration(id, model));
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken(LoginResponse model)
     {
-        var response = await _authService.RefreshToken(model);
+        var response = await _serviceManager.AuthService.RefreshToken(model);
         return Ok(response);
     }
 
@@ -77,7 +77,7 @@ public class AuthController : ControllerBase
     [HttpGet("user-list")]
     public async Task<IActionResult> GetUserList(string? searchingParams, [FromQuery] SortingParams sortingParams)
     {
-        var response = await _authService.UserList(searchingParams, sortingParams);
+        var response = await _serviceManager.AuthService.UserList(searchingParams, sortingParams);
         return Ok(response);
     }
 
@@ -90,7 +90,7 @@ public class AuthController : ControllerBase
     [HttpGet("user/{userid}")]
     public async Task<IActionResult> GetUserById(int userid)
     {
-        var response = await _authService.GetUser(userid);
+        var response = await _serviceManager.AuthService.GetUser(userid);
         return Ok(response);
     }
 
@@ -103,6 +103,6 @@ public class AuthController : ControllerBase
     [HttpDelete("delete-profile")]
     public async Task<IActionResult> DeleteProfile(int id)
     {
-        return Ok(await _authService.DeleteRegistration(id));
+        return Ok(await _serviceManager.AuthService.DeleteRegistration(id));
     }
 }

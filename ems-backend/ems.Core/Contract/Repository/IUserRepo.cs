@@ -5,7 +5,7 @@ using ems.Common.model.Auth;
 
 namespace ems.Core.Contract.Repository;
 
-public interface IUserRepo
+public interface IUserRepo : IRepoBase<User>
 {
     Task<RegisterResponse> RegisterAsync(Registration model);
     Task<RegisterResponse> UpdateRegistration(Registration registration);

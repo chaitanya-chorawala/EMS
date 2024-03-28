@@ -9,11 +9,11 @@ namespace ems.API.Controllers;
 [ApiController]
 public class EventController : ControllerBase
 {
-    private readonly IEventService _eventService;
+    private readonly IServiceManager _serviceManager;
 
-    public EventController(IEventService eventService)
+    public EventController(IServiceManager serviceManager)
     {
-        _eventService = eventService;
+        _serviceManager = serviceManager;
     }
     /// <summary>
     /// get the event detail
@@ -25,7 +25,7 @@ public class EventController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetEvent(string? searchingParams, [FromQuery] SortingParams sortingParams, bool isCompleted = false)
     {
-        return Ok(await _eventService.GetEvent(searchingParams, sortingParams, isCompleted));
+        return Ok(await _serviceManager.EventService.GetEvent(searchingParams, sortingParams, isCompleted));
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class EventController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetEvent(int id)
     {
-        return Ok(await _eventService.GetEventByIdAsync(id));
+        return Ok(await _serviceManager.EventService.GetEventByIdAsync(id));
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromForm] AddEventDto addEventDto)
     {
-        return Ok(await _eventService.AddEventAsync(addEventDto));
+        return Ok(await _serviceManager.EventService.AddEventAsync(addEventDto));
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class EventController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateEvent(int id,[FromForm] AddEventDto addEventDto)
     {
-        return Ok(await _eventService.UpdateEventAsync(id, addEventDto));
+        return Ok(await _serviceManager.EventService.UpdateEventAsync(id, addEventDto));
     }
 
     /// <summary>
@@ -70,6 +70,6 @@ public class EventController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteEvent(int id)
     {
-        return Ok(await _eventService.DeleteEventAsync(id));
+        return Ok(await _serviceManager.EventService.DeleteEventAsync(id));
     }
 }
