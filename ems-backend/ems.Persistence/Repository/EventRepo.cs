@@ -12,12 +12,13 @@ using AutoMapper;
 
 namespace ems.Persistence.Repository
 {
-    public class EventRepo : IEventRepo
+    public class EventRepo :  RepoBase<Event>, IEventRepo
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
         public EventRepo(ApplicationDbContext context, IMapper mapper)
+            : base(context)
         {
             _context = context;
             _mapper = mapper;
@@ -88,61 +89,61 @@ namespace ems.Persistence.Repository
             }
         }
 
-        public async Task<RegisterResponse> AddEvent(Event eve)
-        {
-            try
-            {
-                await _context.Event.AddAsync(eve);
-                await _context.SaveChangesAsync();
+        //public async Task<RegisterResponse> AddEvent(Event eve)
+        //{
+        //    try
+        //    {
+        //        await _context.Event.AddAsync(eve);
+        //        await _context.SaveChangesAsync();
 
-                return new RegisterResponse() { Message = "Event added successfully." };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        return new RegisterResponse() { Message = "Event added successfully." };
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        public async Task<RegisterResponse> UpdateEvent(Event eve)
-        {
-            try
-            {
-                _context.Event.Update(eve);
-                await _context.SaveChangesAsync();
+        //public async Task<RegisterResponse> UpdateEvent(Event eve)
+        //{
+        //    try
+        //    {
+        //        _context.Event.Update(eve);
+        //        await _context.SaveChangesAsync();
 
-                return new RegisterResponse() { Message = "Event updated successfully." };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        return new RegisterResponse() { Message = "Event updated successfully." };
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        public async Task<RegisterResponse> DeleteEvent(Event eve)
-        {
-            try
-            {
-                _context.Event.Remove(eve);
-                await _context.SaveChangesAsync();
+        //public async Task<RegisterResponse> DeleteEvent(Event eve)
+        //{
+        //    try
+        //    {
+        //        _context.Event.Remove(eve);
+        //        await _context.SaveChangesAsync();
 
-                return new RegisterResponse() { Message = "Event deleted successfully." };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        return new RegisterResponse() { Message = "Event deleted successfully." };
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        public async Task<Event> GetEventById(int id)
-        {
-            try
-            {
-                return await _context.Event.FirstOrDefaultAsync(x => x.EventId == id) ?? throw new NotFoundException("Event not found");
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //public async Task<Event> GetEventById(int id)
+        //{
+        //    try
+        //    {
+        //        return await _context.Event.FirstOrDefaultAsync(x => x.EventId == id) ?? throw new NotFoundException("Event not found");
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

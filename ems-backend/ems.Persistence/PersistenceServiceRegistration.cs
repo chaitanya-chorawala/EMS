@@ -20,13 +20,11 @@ public static class PersistenceServiceRegistration
     {
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        services.TryAddScoped<IUserRepo, UserRepo>();
-        services.TryAddScoped<IClaimPrincipalAccessor, ClaimPrincipalAccessor>();
-        services.TryAddScoped<ITokenGenerator, TokenGenerator>();
-        services.TryAddScoped<IAuthService, AuthService>();
+        services.TryAddScoped<IRepoManager, RepoManager>();
+        services.TryAddScoped<IServiceManager, ServiceManager>();
 
-        services.AddTransient<IEventRepo, EventRepo>();
-        services.AddTransient<IEventService, EventService>();
+        services.TryAddScoped<IClaimPrincipalAccessor, ClaimPrincipalAccessor>();
+        services.TryAddScoped<ITokenGenerator, TokenGenerator>();        
 
         services.AddScoped<IValidator<AddEventDto>, EventValidator>();
         services.AddScoped<IValidator<Register>, RegistrationValidator>();

@@ -7,6 +7,7 @@ using ems.Common.model.Auth;
 using ems.Common.model.Event;
 using ems.Core.Contract.Repository;
 using ems.Core.Contract.Service;
+using ems.Persistence.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
@@ -14,27 +15,27 @@ namespace ems.Persistence.Service;
 
 public class EventService : IEventService
 {
-    private readonly IEventRepo _eventRepo;
+    private readonly IRepoManager _repoManager;
     private readonly IMapper _mapper;
     private readonly IValidator<AddEventDto> _validator;
 
-    public EventService(IEventRepo eventRepo, IMapper mapper, IValidator<AddEventDto> validator)
+    public EventService(IRepoManager repoManager, IMapper mapper, IValidator<AddEventDto> validator)
     {
-        _eventRepo = eventRepo;
+        _repoManager = repoManager;
         _mapper = mapper;
         _validator = validator;
     }
 
     public async Task<PaginationResponse<EventResponse>> GetEvent(string? searchingParams, SortingParams sortingParams, bool? isCompleted)
     {
-        return await _eventRepo.GetEvent(isCompleted, searchingParams, sortingParams);
+        return await _repoManager.EventRepo.GetEvent(isCompleted, searchingParams, sortingParams);
     }
 
     private async Task<(string, string)> GetFileAndDirectoryPath()
     {
         string localPath = "";
 
-        var filePath = await _eventRepo.GetFilePath("Rayna");
+        var filePath = await _repoManager.EventRepo.GetFilePath("Rayna");
 
         var additionalPath = "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MMM") + "\\";
 
@@ -90,7 +91,9 @@ public class EventService : IEventService
             mapEvent.EventMediaList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
         }        
         
-        return await _eventRepo.AddEvent(mapEvent);
+        _repoManager.EventRepo.Create(mapEvent);
+        await _repoManager.SaveChangesAsync();
+        return new RegisterResponse() { Message = "Event added successfully." };
     }
 
     public async Task<RegisterResponse> UpdateEventAsync(int id, AddEventDto addEventDto)
@@ -102,7 +105,7 @@ public class EventService : IEventService
             throw new BadRequestException(string.Join('|', res.Errors.ToList()));
         }
 
-        var existingEvent = await _eventRepo.GetEventById(id);
+        var existingEvent = await _repoManager.EventRepo.FindByConditionFirstOrDefault(x => x.EventId == id);
 
         _mapper.Map(addEventDto, existingEvent);
 
@@ -112,18 +115,24 @@ public class EventService : IEventService
             existingEvent.EventMediaList = UploadEventFiles(addEventDto.EventFiles, directoryPath, localPath);
         }
 
-        return await _eventRepo.UpdateEvent(existingEvent);
+        _repoManager.EventRepo.Update(existingEvent);
+        await _repoManager.SaveChangesAsync();
+        return new RegisterResponse() { Message = "Event updated successfully." };
     }
 
     public async Task<RegisterResponse> DeleteEventAsync(int id)
     {
-        var existingEvent = await _eventRepo.GetEventById(id);
-        return await _eventRepo.DeleteEvent(existingEvent);
+        var existingEvent = await _repoManager.EventRepo.FindByConditionFirstOrDefault(x => x.EventId == id);
+        
+        _repoManager.EventRepo.Delete(existingEvent);
+        await _repoManager.SaveChangesAsync();
+
+        return new RegisterResponse() { Message = "Event deleted successfully." };
     }
 
     public async Task<EventResponse> GetEventByIdAsync(int id)
-    {
-        var eve = await _eventRepo.GetEventById(id);
+    {        
+        var eve = await _repoManager.EventRepo.FindByConditionFirstOrDefault(x => x.EventId == id);
         return _mapper.Map<EventResponse>(eve);
     }
 }
